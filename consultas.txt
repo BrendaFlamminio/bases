@@ -1,0 +1,14 @@
+SERVICIOS A-
+
+SELECT ap.nro_posicion , ap.nro_estanteria, ap.nro_fila,c.cuit_cuil, ap.estado AS disponible
+FROM gr7_cliente c NATURAL JOIN gr7_alquiler a
+NATURAL JOIN gr7_alquiler_posiciones ap 
+WHERE '2019/06/02' BETWEEN a.fecha_desde AND a.fecha_hasta
+AND ap.estado = false
+
+
+	B
+SELECT ap.nro_posicion, ap.nro_estanteria, ap.nro_fila, 
+FROM gr7_alquiler_posiciones ap NATURAL JOIN gr7_alquiler a 
+WHERE '2019/06/02' NOT BETWEEN a.fecha_desde AND a.fecha_hasta
+AND ap.estado=true
