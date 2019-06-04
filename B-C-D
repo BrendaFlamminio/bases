@@ -1,0 +1,4 @@
+B-C
+Alter table gr7_posicion
+ADD CONSTRAINT CK_GR7_GR7_POSICION_tipo_valido
+       CHECK (tipo IN ('General','Vidrio','Insecticidas','Inflamable'));
