@@ -2,3 +2,10 @@ B-C
 Alter table gr7_posicion
 ADD CONSTRAINT CK_GR7_GR7_POSICION_tipo_valido
        CHECK (tipo IN ('General','Vidrio','Insecticidas','Inflamable'));
+
+B-A
+ALTER TABLE GR7_ALQUILER
+ADD CONSTRAINT CK_GR7_GR7_ALQUILER_fecha_valida
+      CHECK (fecha_desde<fecha_hasta);
+      //INSERT INTO gr7_alquiler
+VALUES (2019-05-02,2018-05-04,25,20124); ESTA ES LA SENTECIA DE PRUEBA QUE ACTIVA LA RESTRICCION 
