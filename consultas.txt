@@ -10,5 +10,64 @@ AND ap.estado = false
 	B
 SELECT ap.nro_posicion, ap.nro_estanteria, ap.nro_fila, 
 FROM gr7_alquiler_posiciones ap NATURAL JOIN gr7_alquiler a 
-WHERE '2019/06/02' NOT BETWEEN a.fecha_desde AND a.fecha_hasta
+WHERE '2019/06/02' BETWEEN a.fecha_desde AND a.fecha_hasta
 AND ap.estado=true
+
+
+RESTRICCIONES 
+// FALTA EL DECLARATIVO ASSERTION 
+CREATE FUNCTION ctrl_fecha ( )
+RETURNS trigger AS $body$
+BEGIN
+	IF
+	  (fecha_desde =< fecha_hasta) THEN
+	  RETURN NEW;
+           ELSE 
+           RAISE EXCEPTION 'FECHAS INGRESADAS INVALIDAS';
+	END IF;
+END; $body$
+LANGUAGE 'plpgsql'
+
+CREATE TRIGGER TR_GR7_ALQUILER_CTRL_FECHA
+AFTER INSERT OR UPDATE 
+OF fecha_desde, fecha_hasta
+ON gr7_alquiler 
+FOR EACH ROW 
+EXECUTE PROCEDURE CTRL_FECHA();
+
+RESTRICCION PESO
+
+CREATE TRIGGER TR_GR7_MOV_ENTRADA_CTRL_PESO
+AFTER INSERT OR UPDATE 
+OF id_movimiento
+ON gr7_mov_entrada
+FOR EACH ROW 
+EXECUTE PROCEDURE CTRL_PESO();
+
+CREATE TRIGGER TR_GR7_MOV_INTERNO_CTRL_PESO
+AFTER INSERT OR UPDATE 
+OF id_movimiento
+ON gr7_mov_interno
+FOR EACH ROW 
+EXECUTE PROCEDURE CTRL_PESO();
+
+CREATE FUNCTION peso_fila()
+RETURNS DECIMAL as $d$
+BEGIN
+SELECT sum(p.peso)
+FROM gr7_fila f INNER JOIN gr7_mov_entrada mi
+ON (f.nro_fila =mi.nro_fila and f.nro_estanteria=mi.nro_estanteria)
+INNER JOIN gr7_pallet p 
+ON (p.cod_pallet=mi.cod_pallet)
+WHERE f.nro_fila = 4 AND f.nro_estanteria= 5
+END; $d$
+LANGUAGE 'plpgsql'
+
+CREATE FUNCTION ctrol_peso()
+RETURNS TRIGGER AS $b$
+DECLARE peso_actualizado = peso_fila()
+BEGIN
+
+
+END; $b$
+LANGUAGE 'plpgsql'
