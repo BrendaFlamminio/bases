@@ -1,4 +1,4 @@
---
+﻿--
 -- PostgreSQL database dump
 --
 
@@ -31,30 +31,6 @@ ALTER SCHEMA unc_249257 OWNER TO unc_249257;
 
 COMMENT ON SCHEMA unc_249257 IS 'Zapata, Joaquín';
 
-
---
--- Name: ctrl_fecha(); Type: FUNCTION; Schema: unc_249257; Owner: unc_249257
---
-
-CREATE FUNCTION unc_249257.ctrl_fecha() RETURNS trigger
-    LANGUAGE plpgsql
-    AS $$BEGIN
-	IF 
-         (NOT EXISTS(SELECT 1
-            FROM GR7_ALQUILER
-	  WHERE (fecha_desde > fecha_hasta))) THEN
-	  RETURN NEW;
-           ELSE 
-           RAISE EXCEPTION 'FECHAS INGRESADAS INVALIDAS';
-	END IF;
-END; $$;
-
-
-ALTER FUNCTION unc_249257.ctrl_fecha() OWNER TO unc_249257;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- Name: gr7_alquiler; Type: TABLE; Schema: unc_249257; Owner: unc_249257
