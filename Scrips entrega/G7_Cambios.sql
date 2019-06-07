@@ -9,6 +9,8 @@ ADD CONSTRAINT ck_gr7_alquiler_fecha_valida CHECK (fecha_desde < fecha_hasta);
 
 --B - Chequeo de peso
 
+-- FUNCION CONTROL PESO SOBRE MOV_ENTRADA
+
 CREATE OR REPLACE FUNCTION TRFN_GR7_CTRL_PESO()
 RETURNS trigger AS $body$
 BEGIN
@@ -19,8 +21,8 @@ IF NOT((select f.peso_max_kg
   SUM(
     COALESCE((
       SELECT SUM(pallet.peso) FROM gr7_mov_entrada move JOIN gr7_pallet pallet ON move.cod_pallet=pallet.cod_pallet WHERE move.nro_fila=new.nro_fila AND move.nro_estanteria=new.nro_estanteria
-      AND move.id_movimiento NOT IN (SELECT movi.id_movimiento_entrada
-        FROM gr7_mov_interno movi)),0)
+      AND move.id_movimiento NOT IN (SELECT movs.id_movimiento_entrada
+        FROM gr7_mov_salida movs WHERE move.id_movimiento=movs.id_movimiento_entrada)),0)
         +
         COALESCE((
           SELECT SUM(pallet.peso) FROM gr7_mov_interno movi JOIN gr7_pallet pallet ON movi.cod_pallet=pallet.cod_pallet WHERE movi.nro_fila=new.nro_fila AND movi.nro_estanteria=new.nro_estanteria
@@ -39,9 +41,43 @@ IF NOT((select f.peso_max_kg
 
           END; $body$ LANGUAGE 'plpgsql';
 		  
+-- FUNCION CONTROL PESO SOBRE MOV_INTERNO
+
+CREATE OR REPLACE FUNCTION TRFN_GR7_CTRL_PESO2()
+RETURNS trigger AS $body$
+BEGIN
+
+IF NOT((select f.peso_max_kg
+  FROM gr7_fila f
+  WHERE f.nro_fila = new.nro_fila AND f.nro_estanteria=new.nro_estanteria)>
+  SUM(
+    COALESCE((
+      SELECT SUM(pallet.peso) FROM gr7_mov_interno movi JOIN gr7_pallet pallet ON movi.cod_pallet=pallet.cod_pallet 
+	  WHERE movi.nro_fila=new.nro_fila AND movi.nro_estanteria=new.nro_estanteria
+      AND movi.id_movimiento NOT IN (SELECT movs.id_movimiento_entrada
+        FROM gr7_mov_salida movs WHERE movi.id_movimiento=movs.id_movimiento_entrada)),0)
+        +
+        COALESCE((
+          SELECT SUM(pallet.peso) FROM gr7_mov_interno movi JOIN gr7_pallet pallet ON movi.cod_pallet=pallet.cod_pallet 
+		  WHERE movi.nro_fila=new.nro_fila AND movi.nro_estanteria=new.nro_estanteria
+          AND movi.id_movimiento IN (SELECT movi1.id_movimiento
+            FROM gr7_mov_interno movi1 JOIN gr7_movimiento m
+            ON movi1.id_movimiento=m.id_movimiento
+            WHERE movi1.cod_pallet=pallet.cod_pallet
+            ORDER BY m.fecha DESC
+            LIMIT 1)
+          ),0) + (SELECT pal.peso FROM gr7_pallet pal WHERE pal.cod_pallet=new.cod_pallet))) THEN
+
+          raise exception 'LA FILA NO PUEDE SOPORTAR MAS PESO';
+
+          END IF;
+          RETURN NEW;
+
+          END; $body$ LANGUAGE 'plpgsql';
+		  
 -- TRIGGER PARA LA TABLA GR7_MOV_ENTRADA
 
-CREATE TRIGGER TRFN_GR7_MOV_ENTRADA_CTRL_PESO
+CREATE TRIGGER TR_GR7_MOV_ENTRADA_CTRL_PESO
 BEFORE INSERT OR UPDATE
 ON gr7_mov_entrada
 FOR EACH ROW
@@ -49,6 +85,16 @@ EXECUTE PROCEDURE  TRFN_GR7_CTRL_PESO();
 
 --INSERT INTO gr7_mov_entrada VALUES
 --('transporte 1','guia 1',1174,2,1,1,1,1);
+
+-- TRIGGER PARA LA TABLA GR7_MOV_INTERNO
+
+CREATE TRIGGER TR_GR7_MOV_INTERNO_CTRL_PESO2
+BEFORE INSERT OR UPDATE
+ON gr7_mov_interno
+FOR EACH ROW
+EXECUTE PROCEDURE  TRFN_GR7_CTRL_PESO2();
+
+
 
 --C Chequeo de tipo
 

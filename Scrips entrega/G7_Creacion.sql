@@ -272,14 +272,14 @@ INSERT INTO gr7_cliente VALUES (21753, 'Acosta', 'Hector', '2019-06-01');
 --gr7_alquiler
 --
 
-INSERT INTO gr7_alquiler VALUES (1, '2018-11-25', '2018-12-04', 25.00, 20458);
-INSERT INTO gr7_alquiler VALUES (2, '2018-11-14', '2018-12-02', 25.00, 22158);
-INSERT INTO gr7_alquiler VALUES (3, '2018-10-02', '2018-10-12', 25.00, 20124);
-INSERT INTO gr7_alquiler VALUES (4, '2019-02-01', '2019-02-28', 25.00, 21731);
-INSERT INTO gr7_alquiler VALUES (5, '2019-05-10', '2019-06-02', 25.00, 22944);
-INSERT INTO gr7_alquiler VALUES (6, '2019-01-01', '2019-08-12', 25.00, 20458);
-INSERT INTO gr7_alquiler VALUES (7, '2019-03-14', '2019-04-02', 25.00, 22158);
-INSERT INTO gr7_alquiler VALUES (8, '2019-04-20', '2019-05-01', 25.00, 21731);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2018-11-25', '2018-12-04', 25.00, 20458);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2018-11-14', '2018-12-02', 25.00, 22158);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2018-10-02', '2018-10-12', 25.00, 20124);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2019-02-01', '2019-02-28', 25.00, 21731);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2019-05-10', '2019-06-02', 25.00, 22944);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2019-01-01', '2019-08-12', 25.00, 20458);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2019-03-14', '2019-04-02', 25.00, 22158);
+INSERT INTO gr7_alquiler VALUES (DEFAULT, '2019-04-20', '2019-05-01', 25.00, 21731);
 
 --
 --gr7_estanteria
@@ -305,20 +305,20 @@ INSERT INTO gr7_fila VALUES (1, 2, 'fila 2', 115.00, 10.50);
 --gr7_posicion
 --
 
-INSERT INTO gr7_posicion VALUES (1, 1, 1, 'general', 1);
-INSERT INTO gr7_posicion VALUES (2, 1, 1, 'vidrio', 2);
-INSERT INTO gr7_posicion VALUES (1, 1, 2, 'general', 3);
-INSERT INTO gr7_posicion VALUES (1, 2, 1, 'vidrio', 4);
-INSERT INTO gr7_posicion VALUES (3, 1, 2, 'general', 5);
-INSERT INTO gr7_posicion VALUES (5, 3, 1, 'vidrio', 6);
-INSERT INTO gr7_posicion VALUES (1, 3, 1, 'inflamable', 7);
-INSERT INTO gr7_posicion VALUES (2, 4, 1, 'insecticidas', 8);
-INSERT INTO gr7_posicion VALUES (2, 2, 1, 'general', 9);
-INSERT INTO gr7_posicion VALUES (3, 2, 1, 'general', 10);
-INSERT INTO gr7_posicion VALUES (4, 2, 1, 'vidrio', 11);
-INSERT INTO gr7_posicion VALUES (5, 2, 1, 'general', 12);
-INSERT INTO gr7_posicion VALUES (6, 2, 1, 'vidrio', 13);
-INSERT INTO gr7_posicion VALUES (7, 2, 1, 'general', 14);
+INSERT INTO gr7_posicion VALUES (1, 1, 1, 'general', DEFAULT);
+INSERT INTO gr7_posicion VALUES (2, 1, 1, 'vidrio', DEFAULT);
+INSERT INTO gr7_posicion VALUES (1, 1, 2, 'general', DEFAULT);
+INSERT INTO gr7_posicion VALUES (1, 2, 1, 'vidrio', DEFAULT);
+INSERT INTO gr7_posicion VALUES (3, 1, 2, 'general', DEFAULT);
+INSERT INTO gr7_posicion VALUES (5, 3, 1, 'vidrio', DEFAULT);
+INSERT INTO gr7_posicion VALUES (1, 3, 1, 'inflamable', DEFAULT);
+INSERT INTO gr7_posicion VALUES (2, 4, 1, 'insecticidas', DEFAULT);
+INSERT INTO gr7_posicion VALUES (2, 2, 1, 'general', DEFAULT);
+INSERT INTO gr7_posicion VALUES (3, 2, 1, 'general', DEFAULT);
+INSERT INTO gr7_posicion VALUES (4, 2, 1, 'vidrio', DEFAULT);
+INSERT INTO gr7_posicion VALUES (5, 2, 1, 'general', DEFAULT);
+INSERT INTO gr7_posicion VALUES (6, 2, 1, 'vidrio', DEFAULT);
+INSERT INTO gr7_posicion VALUES (7, 2, 1, 'general', DEFAULT);
 
 --
 --gr7_alquiler_posiciones
@@ -348,23 +348,23 @@ INSERT INTO gr7_pallet VALUES ('1321', 'planchas de vidrios', 18.50);
 --gr7_movimiento
 --
 
-INSERT INTO gr7_movimiento VALUES (1, '2018-11-25 00:00:00', 'Empleado 1', 'e');
-INSERT INTO gr7_movimiento VALUES (2, '2018-11-14 00:00:00', 'Empleado 1', 'E');
-INSERT INTO gr7_movimiento VALUES (3, '2018-10-02 00:00:00', 'Empleado 2', 'e');
-INSERT INTO gr7_movimiento VALUES (4, '2019-02-01 00:00:00', 'Empleado 2', 'e');
-INSERT INTO gr7_movimiento VALUES (5, '2019-05-10 00:00:00', 'Empleado 1', 'e');
-INSERT INTO gr7_movimiento VALUES (6, '2019-01-01 00:00:00', 'Empleado 3', 'e');
-INSERT INTO gr7_movimiento VALUES (7, '2019-03-14 00:00:00', 'Empleado 3', 'e');
-INSERT INTO gr7_movimiento VALUES (9, '2018-11-29 00:00:00', 'empleado 1', 'i');
-INSERT INTO gr7_movimiento VALUES (10, '2019-02-15 00:00:00', 'empleado 2', 'i');
-INSERT INTO gr7_movimiento VALUES (11, '2019-04-22 00:00:00', 'empleado 2', 'i');
-INSERT INTO gr7_movimiento VALUES (12, '2019-03-28 00:00:00', 'empleado 2', 'i');
-INSERT INTO gr7_movimiento VALUES (8, '2018-11-02 00:00:00', 'empleado 1', 'i');
-INSERT INTO gr7_movimiento VALUES (13, '2018-12-04 00:00:00', 'empleado 3', 's');
-INSERT INTO gr7_movimiento VALUES (14, '2018-12-02 00:00:00', 'empleado 3', 's');
-INSERT INTO gr7_movimiento VALUES (15, '2018-10-12 00:00:00', 'empleado 3', 's');
-INSERT INTO gr7_movimiento VALUES (16, '2019-02-28 00:00:00', 'empleado 3', 's');
-INSERT INTO gr7_movimiento VALUES (18, '2019-04-02 00:00:00', 'empleado 3', 's');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-11-25 00:00:00', 'Empleado 1', 'e');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-11-14 00:00:00', 'Empleado 1', 'E');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-10-02 00:00:00', 'Empleado 2', 'e');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-02-01 00:00:00', 'Empleado 2', 'e');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-05-10 00:00:00', 'Empleado 1', 'e');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-01-01 00:00:00', 'Empleado 3', 'e');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-03-14 00:00:00', 'Empleado 3', 'e');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-11-29 00:00:00', 'empleado 1', 'i');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-02-15 00:00:00', 'empleado 2', 'i');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-04-22 00:00:00', 'empleado 2', 'i');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-03-28 00:00:00', 'empleado 2', 'i');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-11-02 00:00:00', 'empleado 1', 'i');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-12-04 00:00:00', 'empleado 3', 's');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-12-02 00:00:00', 'empleado 3', 's');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2018-10-12 00:00:00', 'empleado 3', 's');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-02-28 00:00:00', 'empleado 3', 's');
+INSERT INTO gr7_movimiento VALUES (DEFAULT, '2019-04-02 00:00:00', 'empleado 3', 's');
 
 --
 --gr7_mov_entrada
@@ -396,4 +396,3 @@ INSERT INTO gr7_mov_salida VALUES ('transporte 3', 'empleado 3', 13, '1174', 1, 
 INSERT INTO gr7_mov_salida VALUES ('transporte 3', 'empleado 3', 14, '124', 2, 2);
 INSERT INTO gr7_mov_salida VALUES ('transporte 3', 'empleado 3', 15, '1321', 3, 3);
 INSERT INTO gr7_mov_salida VALUES ('transporte 3', 'empleado 3', 16, '1424', 4, 4);
-INSERT INTO gr7_mov_salida VALUES ('transporte 3', 'empleado 3', 18, '548', 7, 7);
