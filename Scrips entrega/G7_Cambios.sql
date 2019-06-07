@@ -1,45 +1,46 @@
 -- B - RESTRICCIONES
 
--- Chequeo de fecha
---A
+-- A - Chequeo de fecha
+
 ALTER TABLE gr7_alquiler
 ADD CONSTRAINT ck_gr7_alquiler_fecha_valida CHECK (fecha_desde < fecha_hasta);
 --INSERT INTO gr7_alquiler
 --VALUES (2019-05-02,2018-05-04,25,20124);
 
---B
+--B - Chequeo de peso
 
 CREATE OR REPLACE FUNCTION TRFN_GR7_CTRL_PESO()
 RETURNS trigger AS $body$
 BEGIN
 
 IF NOT((select f.peso_max_kg
-  from gr7_fila f
-  where f.nro_fila = new.nro_fila AND f.nro_estanteria=new.nro_estanteria)>
+  FROM gr7_fila f
+  WHERE f.nro_fila = new.nro_fila AND f.nro_estanteria=new.nro_estanteria)>
   SUM(
-    coalesce((
-      select SUM(pallet.peso) from gr7_mov_entrada move join gr7_pallet pallet on move.cod_pallet=pallet.cod_pallet where move.nro_fila=new.nro_fila and move.nro_estanteria=new.nro_estanteria
-      and move.id_movimiento not in (select movi.id_movimiento_entrada
-        from gr7_mov_interno movi)),0)
+    COALESCE((
+      SELECT SUM(pallet.peso) FROM gr7_mov_entrada move JOIN gr7_pallet pallet ON move.cod_pallet=pallet.cod_pallet WHERE move.nro_fila=new.nro_fila AND move.nro_estanteria=new.nro_estanteria
+      AND move.id_movimiento NOT IN (SELECT movi.id_movimiento_entrada
+        FROM gr7_mov_interno movi)),0)
         +
-        coalesce((
-          select sum(pallet.peso) from gr7_mov_interno movi join gr7_pallet pallet on movi.cod_pallet=pallet.cod_pallet where movi.nro_fila=new.nro_fila and movi.nro_estanteria=new.nro_estanteria
-          and movi.id_movimiento in (SELECT movi1.id_movimiento
-            from gr7_mov_interno movi1 JOIN gr7_movimiento m
+        COALESCE((
+          SELECT SUM(pallet.peso) FROM gr7_mov_interno movi JOIN gr7_pallet pallet ON movi.cod_pallet=pallet.cod_pallet WHERE movi.nro_fila=new.nro_fila AND movi.nro_estanteria=new.nro_estanteria
+          AND movi.id_movimiento IN (SELECT movi1.id_movimiento
+            FROM gr7_mov_interno movi1 JOIN gr7_movimiento m
             ON movi1.id_movimiento=m.id_movimiento
             WHERE movi1.cod_pallet=pallet.cod_pallet
             ORDER BY m.fecha DESC
-            limit 1)
-          ),0) + (select pal.peso from gr7_pallet pal where pal.cod_pallet=new.cod_pallet))) THEN
+            LIMIT 1)
+          ),0) + (SELECT pal.peso FROM gr7_pallet pal WHERE pal.cod_pallet=new.cod_pallet))) THEN
 
           raise exception 'LA FILA NO PUEDE SOPORTAR MAS PESO';
-
 
           END IF;
           RETURN NEW;
 
           END; $body$ LANGUAGE 'plpgsql';
---TRIGGER PARA LA TABLA GR7_MOV_ENTRADA
+		  
+-- TRIGGER PARA LA TABLA GR7_MOV_ENTRADA
+
 CREATE TRIGGER TRFN_GR7_MOV_ENTRADA_CTRL_PESO
 BEFORE INSERT OR UPDATE
 ON gr7_mov_entrada
@@ -49,8 +50,8 @@ EXECUTE PROCEDURE  TRFN_GR7_CTRL_PESO();
 --INSERT INTO gr7_mov_entrada VALUES
 --('transporte 1','guia 1',1174,2,1,1,1,1);
 
---C
--- Chequeo de tipo
+--C Chequeo de tipo
+
 ALTER TABLE gr7_posicion
 ADD CONSTRAINT ck_gr7_posicion_tipo_valido CHECK (tipo IN ('general','vidrio', 'insecticidas', 'inflamable'));
 --INSERT INTO gr7_posicion
